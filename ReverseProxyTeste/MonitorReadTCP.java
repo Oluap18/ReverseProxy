@@ -19,15 +19,12 @@ public class MonitorReadTCP extends Thread{
 			while(true){
 				str = in.readLine();
 				if(str==null)
-					break;
-				//System.out.println("Recebi MonitorRead " + socket.getInetAddress());
+					break;				
 				System.out.println(str);
 				write.setMensagem("Recebi a tua mensagem: " + str + socket.getInetAddress());
-				//System.out.println("Escrevi MonitorRead " + socket.getInetAddress());
 			}
 		}
 		catch(Exception e){}
 		write.setMensagem(null);
-		System.out.println("A conexão fechou. Monitor Read");
 	}
 }	

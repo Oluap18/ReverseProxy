@@ -9,8 +9,6 @@ public class MonitorUDP
         DatagramSocket clientSocket = new DatagramSocket(5555);
         MonitorUDPUpd monitorUDPUpd = new MonitorUDPUpd(clientSocket);
         monitorUDPUpd.start();
-        /*MonitorTCP monitorTCP = new MonitorTCP();
-        monitorTCP.start();*/
         InetAddress ipAdress = InetAddress.getByName(args[0]);
         byte[] sendData = new byte[1];
         while(true){

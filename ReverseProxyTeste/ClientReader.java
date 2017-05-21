@@ -22,6 +22,5 @@ public class ClientReader extends Thread{
 			}
 		}
 		catch(Exception e){}
-		System.out.println("A conexão fechou. Client Reader");
 	}
 }	

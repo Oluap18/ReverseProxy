@@ -16,7 +16,6 @@ public class MonitorTCP extends Thread{
 				MonitorReadTCP read = new MonitorReadTCP(socket, write);
 				write.start();
 				read.start();
-				System.out.println("Criei " + socket.getInetAddress());
 			}
 		}
 		catch(Exception e){}

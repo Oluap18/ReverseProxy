@@ -22,7 +22,6 @@ public class ClientWriter extends Thread{
 			}
 		}
 		catch(Exception e){}
-		System.out.println("Sai do writer cliente");
 		try{
 			socket.shutdownOutput();
 			socket.close();
