@@ -4,31 +4,28 @@ import java.util.*;
 
 public class ProxyReadClTCP extends Thread{
 
-    private Socket socket;
+    private Socket cliente;
+    private Socket monitor;
     private Map<InetAddress, TabelaMonitor> tabela;
-    private ProxyWriteMonTCP write;
 
-    public ProxyReadClTCP(Socket s, Map<InetAddress, TabelaMonitor> t, ProxyWriteMonTCP w){
-        this.socket = s;
+    public ProxyReadClTCP(Socket c, Socket m, Map<InetAddress, TabelaMonitor> t){
+        this.cliente = c;
         this.tabela = t;
-        this.write = w;
+        this.monitor = m;
     }
 
     public void run(){
         try{
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
+            PrintWriter out = new PrintWriter(monitor.getOutputStream());
             while(true){
                 String str = in.readLine();
                 if(str == null)
                     break;
-                //System.out.println("Li ReadCL " + socket.getInetAddress());
-                //System.out.println(socket.getInetAddress() + " : " + str);
-                write.setMensagem(str);
-                //System.out.println("Escrevi ReadCl " + socket.getInetAddress());
+                out.println(str + "\r");
+                out.flush();
             }
     	}
         catch(Exception e){}
-        write.setMensagem(null);
-        System.out.println("Sai do read cliente");
     }
 }

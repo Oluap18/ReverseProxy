@@ -9,7 +9,7 @@ public class MonitorTCP extends Thread{
 
 	public void run(){
 		try{
-			ServerSocket srv = new ServerSocket(6666);
+			ServerSocket srv = new ServerSocket(80);
 			while(true){
 				Socket socket = srv.accept();
 				MonitorWriteTCP write = new MonitorWriteTCP(socket);

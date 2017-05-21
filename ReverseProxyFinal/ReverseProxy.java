@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-public class ServerProxy{
+public class ReverseProxy{
 
 	public static InetAddress getMonitor(HashMap<InetAddress,TabelaMonitor> tabela){
         InetAddress ip = null;
@@ -31,27 +31,20 @@ public class ServerProxy{
 		ServerSocket srv = new ServerSocket(80);
 		while(true){
 			Socket cliente = srv.accept();
-			ProxyWriteClTCP writeCl = new ProxyWriteClTCP(cliente);
-			writeCl.start();
 			InetAddress ip = getMonitor(tabela);
-			Thread.sleep(10);
 			while(ip==null){
-				writeCl.setMensagem("Nenhum Monitor Disponível, aguarde");
 				synchronized(tabela){
 					tabela.wait();
 				}
 				ip = getMonitor(tabela);
 			}
-			writeCl.setMensagem("Monitor Disponível, conectado");
 			TabelaMonitor t = tabela.get(ip);
 			t.incTCPCon();
-			Socket monitor = new Socket(ip, 6666);
-			ProxyWriteMonTCP writeMon = new ProxyWriteMonTCP(monitor);
-			ProxyReadClTCP readCl = new ProxyReadClTCP(cliente, tabela, writeMon);
-			ProxyReadMonTCP readMon = new ProxyReadMonTCP(monitor, tabela, writeCl);
-			readCl.start();
+			Socket monitor = new Socket(ip, 80);
+			ProxyReadClTCP readCl = new ProxyReadClTCP(cliente, monitor, tabela);
+			ProxyReadMonTCP readMon = new ProxyReadMonTCP(monitor, cliente, tabela);
 			readMon.start();
-			writeMon.start();
+			readCl.start();
 		}
 	}
 

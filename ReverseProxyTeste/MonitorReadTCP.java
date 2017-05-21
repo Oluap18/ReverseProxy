@@ -20,7 +20,6 @@ public class MonitorReadTCP extends Thread{
 				str = in.readLine();
 				if(str==null)
 					break;				
-				System.out.println(str);
 				write.setMensagem("Recebi a tua mensagem: " + str + socket.getInetAddress());
 			}
 		}

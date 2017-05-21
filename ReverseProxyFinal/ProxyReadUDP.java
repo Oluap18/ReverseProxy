@@ -21,6 +21,7 @@ public class ProxyReadUDP extends Thread{
          while(true){
             DatagramPacket receivePacket = new DatagramPacket(receiveData, 1024);
             serverSocket.receive(receivePacket);
+            Timestamp now = new Timestamp(System.currentTimeMillis());
             InetAddress ipAddress = receivePacket.getAddress();
             data = new byte[receivePacket.getLength()];
             System.arraycopy(receivePacket.getData(), receivePacket.getOffset(), data, 0, receivePacket.getLength());
@@ -28,7 +29,7 @@ public class ProxyReadUDP extends Thread{
                case 0:
                   if(!tabela.containsKey(ipAddress)){
                      synchronized(tabela){
-                        TabelaMonitor t = new TabelaMonitor(ipAddress);
+                        TabelaMonitor t = new TabelaMonitor(ipAddress, now);
                         tabela.put(ipAddress,t);
                         tabela.notify();
                      }
@@ -42,13 +43,13 @@ public class ProxyReadUDP extends Thread{
                      TabelaMonitor t;
                      synchronized(tabela){ t = tabela.get(ipAddress); }
                      synchronized(t){
-                        Timestamp now = new Timestamp(System.currentTimeMillis());
                         t.setTime(now);
-                        t.incReset();
+                        t.incReset(now);
                      }
                   }
                   break;
                case 1:
+                  System.out.println("Ip: " + ipAddress + "Pacote: " + data[1]);
                   ProxyUpdateIP p;
                   p = updates.get(ipAddress);
                   p.setPacket(data);

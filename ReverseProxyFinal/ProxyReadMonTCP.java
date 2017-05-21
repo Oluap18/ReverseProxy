@@ -4,28 +4,28 @@ import java.util.*;
 
 public class ProxyReadMonTCP extends Thread{
 
-    private Socket socket;
+    private Socket monitor;
+    private Socket cliente;
     private Map<InetAddress, TabelaMonitor> tabela;
-    private ProxyWriteClTCP write;
     private InetAddress ipAddress;
 
-    public ProxyReadMonTCP(Socket s, Map<InetAddress, TabelaMonitor> t, ProxyWriteClTCP w){
-        this.socket = s;
+    public ProxyReadMonTCP(Socket m, Socket c, Map<InetAddress, TabelaMonitor> t){
+        this.monitor = m;
         this.tabela = t;
-        this.write = w;
-        this.ipAddress = socket.getInetAddress();
+        this.ipAddress = monitor.getInetAddress();
+        this.cliente = c;
     }
 
     public void run(){
         try{
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(monitor.getInputStream()));
+            PrintWriter out = new PrintWriter(cliente.getOutputStream());
             while(true){
                 String str = in.readLine();
                 if(str == null)
                     break;
-                //System.out.println("Li ReadMon " + socket.getInetAddress());
-                //System.out.println(socket.getInetAddress() + " : " + str);
-                write.setMensagem(str);
+                out.println(str);
+                out.flush();
             }
     	}
         catch(Exception e){}
@@ -36,7 +36,5 @@ public class ProxyReadMonTCP extends Thread{
         synchronized(t){
             t.decTCPCon();
         }
-        write.setMensagem(null);
-        System.out.println("Sai do Read Monitor.");
     }
 }
