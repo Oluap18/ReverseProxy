@@ -10,8 +10,7 @@ public class TabelaMonitor{
 	private int packetCount;
 	private int tcpCon;
 	private InetAddress ipMonitor;
-	private Timestamp time;
-	private int reset; 
+	private Timestamp time; //a última atualização que estava disponivel
 	private int duplicados;
 
 	public TabelaMonitor(InetAddress ip){
@@ -97,21 +96,9 @@ public class TabelaMonitor{
 		return ipMonitor;
 	}
 
-	void incReset(){
-		reset++;
-		if(reset==12){
-			System.out.println("PacketLoss %: " + this.getPacketLoss() + ". RTT: " + this.getRtt() + ". Address: " + this.ipMonitor + "Nº PacketLoss:" + this.getNPacketLoss() + ". PacketCount: " + this.getPacketCount() + ". Duplicados: " + this.getDuplicados() + ". Nª Duplicados: " + this.getNDuplicados() + ". Nº de conexões TCP: " + this.tcpCon);
-		    System.out.println("Status :" + this.getStatus());
-			this.reset=0;
-			this.packetLoss=0;
-			this.packetCount=0;
-			this.rtt=0;
-			this.duplicados=0;
-		}
-	}
-
-	int getReset(){
-		return reset;
+	void status(){
+		System.out.println("PacketLoss %: " + this.getPacketLoss() + ". RTT: " + this.getRtt() + ". Address: " + this.ipMonitor + "Nº PacketLoss:" + this.getNPacketLoss() + ". PacketCount: " + this.getPacketCount() + ". Duplicados: " + this.getDuplicados() + ". Nª Duplicados: " + this.getNDuplicados() + ". Nº de conexões TCP: " + this.tcpCon);
+		System.out.println("Status :" + this.getStatus());
 	}
 
 	double getStatus(){

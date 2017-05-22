@@ -21,6 +21,7 @@ public class ProxyReadUDP extends Thread{
          while(true){
             DatagramPacket receivePacket = new DatagramPacket(receiveData, 1024);
             serverSocket.receive(receivePacket);
+            Timestamp now = new Timestamp(System.currentTimeMillis());
             InetAddress ipAddress = receivePacket.getAddress();
             data = new byte[receivePacket.getLength()];
             System.arraycopy(receivePacket.getData(), receivePacket.getOffset(), data, 0, receivePacket.getLength());
@@ -42,9 +43,8 @@ public class ProxyReadUDP extends Thread{
                      TabelaMonitor t;
                      synchronized(tabela){ t = tabela.get(ipAddress); }
                      synchronized(t){
-                        Timestamp now = new Timestamp(System.currentTimeMillis());
                         t.setTime(now);
-                        t.incReset();
+                        t.status();
                      }
                   }
                   break;

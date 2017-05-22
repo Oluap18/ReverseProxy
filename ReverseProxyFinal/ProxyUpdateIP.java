@@ -15,6 +15,7 @@ public class ProxyUpdateIP extends Thread{
 	private boolean cond[] = new boolean[1];
 	private byte nextPacket;
 	private int duplicados;
+	private long rttAux; // variável para ajudar no timertask
 
 	public ProxyUpdateIP(Map<InetAddress, TabelaMonitor> t, InetAddress i, DatagramSocket s){
       	this.tabela = t;
@@ -22,6 +23,7 @@ public class ProxyUpdateIP extends Thread{
         this.serverSocket = s;
         packet = new byte[1024];
         cond[0] = true;
+        rttAux=0;
    	}
 
    	public void run(){
@@ -72,11 +74,11 @@ public class ProxyUpdateIP extends Thread{
 		      		task = new PacketLossTime(obj, cond);
 		      		timer = new Timer();
 		      		serverSocket.send(sendPacket);
-		      		if(t.getPacketCount()==0){
+		      		if(rttAux==0){
 		      			timer.schedule(task, 100);
 		      		}
 		      		else{
-		      			timer.schedule(task, (long) t.getRtt()*2);
+		      			timer.schedule(task, rttAux*2);
 		      		}
 		      		while(cond[0])	
 		      			obj.wait();
@@ -100,6 +102,7 @@ public class ProxyUpdateIP extends Thread{
 		    synchronized(t){
 		    	t.addPacketCount(packetCount);
 		    	t.addRtt(rtt);
+		    	rttAux = (long) t.getRtt();
 		    	t.addPacketLoss(packetLoss);
 		    	t.addDuplicados(duplicados);
 			}

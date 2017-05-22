@@ -30,6 +30,7 @@ public class ProxyReadMonTCP extends Thread{
         }
         catch(Exception e){}
         TabelaMonitor t;
+        System.out.println("Cheguei");
         synchronized(tabela){
             t = tabela.get(ipAddress);
         }

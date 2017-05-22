@@ -26,6 +26,7 @@ public class ProxyReadMonTCP extends Thread{
                     break;
                 out.println(str);
                 out.flush();
+                System.out.println("Monitor :" + ipAddress + " mandou mensagem.");
             }
     	}
         catch(Exception e){}

@@ -29,7 +29,7 @@ public class ProxyReadUDP extends Thread{
                case 0:
                   if(!tabela.containsKey(ipAddress)){
                      synchronized(tabela){
-                        TabelaMonitor t = new TabelaMonitor(ipAddress, now);
+                        TabelaMonitor t = new TabelaMonitor(ipAddress);
                         tabela.put(ipAddress,t);
                         tabela.notify();
                      }
@@ -44,12 +44,11 @@ public class ProxyReadUDP extends Thread{
                      synchronized(tabela){ t = tabela.get(ipAddress); }
                      synchronized(t){
                         t.setTime(now);
-                        t.incReset(now);
+                        t.status();
                      }
                   }
                   break;
                case 1:
-                  System.out.println("Ip: " + ipAddress + "Pacote: " + data[1]);
                   ProxyUpdateIP p;
                   p = updates.get(ipAddress);
                   p.setPacket(data);
