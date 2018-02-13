@@ -1,0 +1,11 @@
+Este trabalho foi feito para a cadeira Comunicações por Computador.
+
+Foi efetuado com auxilio da ferramenta Core, para simular comunicações entre diferentes computadores.
+
+Mais informações sobre o trabalho, estará explicado no relatório ReverseProxy.pdf
+
+Para executar este projeto deverá executar, após compilar, o ReverseProxy num servidor.
+
+De seguida, executa o MonitorUDP em servidores back-end, que irão responder aos pedidos dos clientes, dando como argumento o ip do servidor do ReverseProxy.
+
+E já está, agora apenas necessita realizar pedidos ao ReverseProxy, que este irá redirecionar os pedidos para um dos servidores back-end.
